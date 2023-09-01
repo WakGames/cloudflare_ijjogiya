@@ -51,6 +51,32 @@ body {
     opacity: 1;
 }
 
+.toast {
+    opacity: 0;
+    z-index: 10;
+
+    position: fixed;
+    overflow: hidden;
+    visibility: hidden;
+
+    padding: 15px 20px;
+    border-radius: 30px;
+    left: 50%;
+
+    color: #fff;
+    font-size: 0.8rem;
+    background: rgba(0, 0, 0, 0.6);
+
+    transform: translate(-50%, 10px);
+    transition: opacity 0.5s, visibility 0.5s, transform 0.5s;
+}
+
+.toast.reveal {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+}
+
 @media (prefers-color-scheme: dark) {
     .progress {
       background-color: #2d2d2d;
@@ -62,5 +88,19 @@ body {
 
     .description span {
       color: #e2e2e2;
+    }
+}
+
+@media (max-width: 550px) {
+    .progress {
+      width: calc(100vw - 20px);
+    }
+
+    .mb\:w-full {
+        width: 100%;
+    }
+
+    .mb\:w-screen {
+        width: 100vw;
     }
 }

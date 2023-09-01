@@ -1,11 +1,10 @@
-let progressData = 0
-
 /**
  * @function loading
  * @param {number} value
+ * @param {boolean} error
  * @description Function for filing progress bar
  */
-const loading = value => {
+const loading = (value, error) => {
   const $progressBar = document.querySelector('.progress .progress-bar')
   const MAX = 100
 
@@ -17,8 +16,14 @@ const loading = value => {
     $progressBar.classList.add('transition')
   }
 
-  if (value >= MAX - 2) {
-    $progressBar.style.backgroundColor = `#00D2B1`
+  if (error) {
+    $progressBar.style.backgroundColor = '#FF3860'
+  } else {
+    if (value >= MAX - 2) {
+      $progressBar.style.backgroundColor = '#00D2B1'
+    } else {
+      $progressBar.style.backgroundColor = ''
+    }
   }
 
   if (value === MAX) {

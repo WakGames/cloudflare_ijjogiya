@@ -1,0 +1,36 @@
+name: Build and GZip
+
+on:
+  # allows to manually run the job at any time
+  workflow_dispatch:
+  
+  # run on every push on the master branch
+  push:
+    branches:
+    - master
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      # checkout the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      # install dependencies
+      - name: Install dependencies
+        run: npm install
+      
+      # generate the static website
+      - name: Build and GZip
+        run: npm run generate
+      
+      # push the static website to the dist branch
+      - name: Push to dist branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: dist

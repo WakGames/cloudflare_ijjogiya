@@ -1,13 +1,13 @@
-name: Build and GZip
+name: Build
 
 on:
   # allows to manually run the job at any time
   workflow_dispatch:
   
-  # run on every push on the master branch
+  # run on every push on the main branch
   push:
     branches:
-    - master
+    - main
 
 jobs:
   generate:
@@ -23,9 +23,9 @@ jobs:
       - name: Install dependencies
         run: npm install
       
-      # generate the static website
-      - name: Build and GZip
-        run: npm run generate
+      # build and minify
+      - name: Build
+        run: npm run build
       
       # push the static website to the dist branch
       - name: Push to dist branch

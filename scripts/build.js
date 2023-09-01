@@ -1,10 +1,12 @@
 const fs = require('fs')
+const archiver = require('archiver')
 
 const { minify } = require('html-minifier-terser')
 const { minify: jsMinify } = require("terser");
 
 // create folders
 try {
+    fs.mkdirSync('./build')
     fs.mkdirSync('./dist')
     fs.mkdirSync('./dist/assets')
     fs.mkdirSync('./dist/assets/css')
@@ -15,6 +17,9 @@ try {
         throw e
     }
 }
+
+// initialize zip file
+const output = fs.createWriteStream('./build/ijjogiya-dist.zip')
 
 // html minify
 fs.readdirSync('./src').forEach(async file => {
@@ -68,3 +73,12 @@ fs.readdirSync('./src/assets/js').forEach(async file => {
 fs.readdirSync('./src/assets/img').forEach(file => {
     fs.copyFileSync(`./src/assets/img/${file}`, `./dist/assets/img/${file}`)
 })
+
+// zip dist file
+const archive = archiver('zip', {
+    zlib: { level: 9 }
+})
+
+archive.directory('dist/', false)
+archive.pipe(output)
+archive.finalize()

@@ -308,7 +308,7 @@
           document.querySelector(".description .loading").style.opacity = 0
           document.querySelector(".description .start").style.opacity = 1
 
-          const download = await axios(
+          const download = await axios.get(
             "https://game-assets.waktaverse.games/test_files/vultr.com.100MB.bin",
             {
               onDownloadProgress: (progressEvent) => {
@@ -321,7 +321,35 @@
                 speedHistory.push(speed)
                 highestSpeed = Math.max(speed, highestSpeed)
 
-                loading(percentCompleted, false)
+                loading(percentCompleted * 0.9, false)
+              },
+            }
+          )
+
+          // 3. 결과 리포트 전송
+          const averageSpeed =
+            speedHistory.reduce((a, b) => a + b, 0) / speedHistory.length
+          
+          const sendReport = await axios.post(
+            "https://speed-test-api.waktaverse.games/report",
+            {
+              data: {
+                type: "CDN",
+                sizeInMb: 100,
+                colo: traceAsObject["colo"].toUpperCase(),
+                country: traceAsObject["loc"].toUpperCase(),
+                warp: traceAsObject["warp"].toUpperCase(),
+                avgSpeed: round(averageSpeed / 1000),
+                maxSpeed: round(highestSpeed / 1000),
+              },
+            },
+            {
+              onDownloadProgress: (progressEvent) => {
+                let percentCompleted = Math.round(
+                  (progressEvent.loaded * 100) / progressEvent.total
+                )
+
+                loading(90 + percentCompleted * 0.1, false)
               },
             }
           )
@@ -330,10 +358,7 @@
           document.querySelector(".description .start").style.opacity = 0
           document.querySelector(".description .complete").style.opacity = 1
 
-          // 3. 결과 출력
-          const averageSpeed =
-            speedHistory.reduce((a, b) => a + b, 0) / speedHistory.length
-
+          // 4. 결과 출력
           document.querySelector("#result").innerHTML = `
               # 기본 정보
               접속 국가 : ${traceAsObject["loc"].toUpperCase()}

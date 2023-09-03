@@ -5,61 +5,297 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WAKTAVERSE Games CDN Test</title>
 
-    <link rel="stylesheet" href="./assets/css/tailwind.css">
-    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/tailwind.css" />
+
+    <style>
+      @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable.css");
+
+      html,
+      body {
+        font-family: "Pretendard Variable", sans-serif;
+      }
+
+      .progress {
+        width: 400px;
+        height: 8px;
+        background-color: #e2e2e2;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-top: 30px;
+
+        transition: color .1s linear;
+      }
+
+      .progress-bar {
+        height: 100%;
+        transform: scaleX(0);
+        border-radius: 4px;
+        background-color: #2d2d2d;
+        transform-origin: left center;
+      }
+
+      .progress-bar.transition {
+        transition: all .1s linear;
+      }
+        
+      .description {
+        margin-top: 30px;
+        position: relative;
+        height: 19px;
+      }
+        
+      .description span {
+        display: block;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        text-align: center;
+        font-size: 13px;
+        color: #242424;
+        opacity: 0;
+        transition: opacity .1s linear;
+      }
+
+      .description span.on {
+        opacity: 1;
+      }
+
+      .toast {
+        opacity: 0;
+        z-index: 10;
+
+        position: fixed;
+        overflow: hidden;
+        visibility: hidden;
+
+        padding: 15px 20px;
+        border-radius: 30px;
+        left: 50%;
+
+        color: #fff;
+        font-size: 0.8rem;
+        background: rgba(0, 0, 0, 0.6);
+
+        transform: translate(-50%, 10px);
+        transition: opacity 0.5s, visibility 0.5s, transform 0.5s;
+      }
+
+      .toast.reveal {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, 0);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .progress {
+          background-color: #2d2d2d;
+        }
+
+        .progress-bar {
+          background-color: #e2e2e2;
+        }
+
+        .description span {
+          color: #e2e2e2;
+        }
+      }
+
+      @media (max-width: 550px) {
+        .progress {
+          width: calc(100vw - 20px);
+        }
+
+        .mb\:w-full {
+            width: 100%;
+        }
+
+        .mb\:w-screen {
+            width: 100vw;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div class="flex flex-col items-center justify-center gap-8 h-screen bg-gray-100 dark:bg-zinc-900">
-        <img src="./assets/img/logo.webp" alt="WAKTAVERSE Games" width="200">
+    <div
+      class="flex flex-col items-center justify-center gap-8 h-screen bg-gray-100 dark:bg-zinc-900"
+    >
+      <img src="data:image/webp;base64,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" alt="WAKTAVERSE Games" width="200" />
 
-        <div id="prepare" class="flex flex-col items-center justify-center gap-8 mb:w">
-            <div class="flex flex-col items-center justify-center">
-                <p class="text-xl font-bold text-gray-600 dark:text-gray-400">WAKTAVERSE Games CDN Test</p>
-            </div>
-
-            <div class="flex flex-col items-center justify-center">
-                <button class="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
-                    100MB 측정 시작하기 &#xf045;
-                </button>
-            </div>
+      <div
+        id="prepare"
+        class="flex flex-col items-center justify-center gap-8 mb:w"
+      >
+        <div class="flex flex-col items-center justify-center">
+          <p class="text-xl font-bold text-gray-600 dark:text-gray-400">
+            WAKTAVERSE Games CDN Test
+          </p>
         </div>
 
-        <div id="doing"></div>
+        <div class="flex flex-col items-center justify-center">
+          <button
+            class="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+          >
+            100MB 측정 시작하기 &#xf045;
+          </button>
+        </div>
 
-        <!-- 결과값 데이터 넣을 textbox -->
-        <textarea id="result" class="hidden text-gray-900 bg-gray-100 dark:text-gray-100 dark:bg-zinc-900 text-sm w-[550px] mb:w-full h-[230px]" readonly></textarea>
+        <div class="flex flex-col items-center justify-center gap-2">
+          <p class="text-xs font-light text-gray-600 dark:text-gray-400">
+            &middot; 측정에 약 100MB의 데이터를 사용합니다.
+          </p>
+          <p class="text-xs font-light text-gray-600 dark:text-gray-400">
+            &middot; 모바일 데이터 환경에서는 요금이 부과될 수 있습니다.
+          </p>
+        </div>
+      </div>
+
+      <div id="doing"></div>
+
+      <!-- 결과값 데이터 넣을 textbox -->
+      <textarea
+        id="result"
+        class="hidden text-gray-900 bg-gray-100 dark:text-gray-100 dark:bg-zinc-900 text-sm w-[550px] mb:w-full h-[230px]"
+        readonly
+      ></textarea>
     </div>
 
     <template id="testing">
-        <div class="progress">
-            <div class="progress-bar" role="progressbar"></div>
-        </div>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar"></div>
+      </div>
 
-        <div class="description">
-          <span class="start">측정 중...</span>
-          <span class="complete">측정 완료</span>
-          <span class="error">측정 실패</span>
-        </div>
+      <div class="description">
+        <span class="loading">측정 준비 중...</span>
+        <span class="start">측정 중...</span>
+        <span class="complete">측정 완료</span>
+        <span class="error">측정 실패</span>
+      </div>
     </template>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js"></script>
-    
-    <script src="./assets/js/toast.js"></script>
-    <script src="./assets/js/loading.js"></script>
-    <script src="./assets/js/common.js"></script>
-    
+
     <script>
+      let toastCount = 0
+
+      function toast(text, style, duration) {
+        const topHeight = toastCount * 60 + 30
+
+        const toast = document.createElement("div")
+        toast.id = "t" + new Date().getTime()
+        toast.style.bottom = topHeight + "px"
+
+        toastCount++
+
+        toast.classList.add("toast")
+        document.body.appendChild(toast)
+
+        removeToast = setTimeout(() => {
+          if (document.querySelectorAll(".toast").length - 1 == 0) {
+            toastCount = 0
+          }
+
+          toast.classList.remove("reveal")
+
+          setTimeout(() => {
+            toast.remove()
+          }, 250)
+        }, duration || 2500)
+
+        if (style == "success") {
+          toast.style.background = "rgba(25, 135, 84, .6)"
+        } else if (style == "error") {
+          toast.style.background = "rgba(220, 53, 69, .6)"
+        } else {
+          toast.style.background = "rgba(0, 0, 0, .6)"
+        }
+
+        setTimeout(() => {
+          toast.classList.add("reveal")
+          toast.innerText = text
+        }, 10)
+      }
+      function loading(value, error) {
+        const $progressBar = document.querySelector(".progress .progress-bar")
+        const MAX = 100
+
+        if (value > MAX)
+          throw new ReferenceError(
+            "Loading value cannot be greater than Max value (100)."
+          )
+
+        if (value === 0) {
+          $progressBar.classList.remove("transition")
+        } else {
+          $progressBar.classList.add("transition")
+        }
+
+        if (error) {
+          $progressBar.style.backgroundColor = "#FF3860"
+        } else {
+          if (value >= MAX - 2) {
+            $progressBar.style.backgroundColor = "#00D2B1"
+          } else {
+            $progressBar.style.backgroundColor = ""
+          }
+        }
+
+        if (value === MAX) {
+          loaded = true
+        }
+
+        $progressBar.style.transform = `scaleX(${value / MAX})`
+      }
+
+      function round(num) {
+        let m = Number((Math.abs(num) * 10).toPrecision(15))
+        return (Math.round(m) / 10) * Math.sign(num)
+      }
+
+      function copyToClipboard(val) {
+        let t = document.createElement("textarea")
+        document.body.appendChild(t)
+
+        t.value = val
+        t.select()
+
+        document.execCommand("copy")
+        document.body.removeChild(t)
+      }
+
+      document.querySelector("button").addEventListener("click", () => {
+        document.querySelector("#prepare").classList.add("hidden")
+
+        document
+          .querySelector("#doing")
+          .append(document.querySelector("#testing").content.cloneNode(true))
+
+        document.querySelector(".description .start").style.opacity = 0
+        document.querySelector(".description .complete").style.opacity = 0
+        document.querySelector(".description .error").style.opacity = 0
+        document.querySelector(".description .loading").style.opacity = 1
+
+        startTest()
+      })
+
+      document.querySelector("#result").addEventListener("click", () => {
+        copyToClipboard(document.querySelector("#result").value)
+        toast("복사되었습니다.")
+      })
+
       async function startTest() {
         try {
-          toast('측정을 시작합니다.')
+          toast("측정을 시작합니다.")
 
           // 1. TRACE 얻기
-          const { data: trace } = await axios.get('https://game-assets.waktaverse.games/cdn-cgi/trace')
-          
+          const { data: trace } = await axios.get(
+            "https://game-assets.waktaverse.games/cdn-cgi/trace"
+          )
+
           let traceAsObject = {}
-          trace.split('\n').forEach(line => {
-              const [key, value] = line.split('=')
-              traceAsObject[key] = value
+          trace.split("\n").forEach((line) => {
+            const [key, value] = line.split("=")
+            traceAsObject[key] = value
           })
 
           // 2. 1000MB 파일 다운로드 + progress
@@ -69,46 +305,54 @@
 
           const startTime = new Date().getTime()
 
-          const download = await axios('https://game-assets.waktaverse.games/test_files/vultr.com.100MB.bin', {
-              onDownloadProgress: progressEvent => {
+          document.querySelector(".description .loading").style.opacity = 0
+          document.querySelector(".description .start").style.opacity = 1
+
+          const download = await axios(
+            "https://game-assets.waktaverse.games/test_files/vultr.com.100MB.bin",
+            {
+              onDownloadProgress: (progressEvent) => {
                 let percentCompleted = Math.round(
                   (progressEvent.loaded * 100) / progressEvent.total
                 )
 
-                speed = progressEvent.loaded / (new Date().getTime() - startTime)
+                speed =
+                  progressEvent.loaded / (new Date().getTime() - startTime)
                 speedHistory.push(speed)
                 highestSpeed = Math.max(speed, highestSpeed)
 
                 loading(percentCompleted, false)
-              }
-          })
+              },
+            }
+          )
 
-          document.querySelector('.description .start').style.opacity = 0
-          document.querySelector('.description .complete').style.opacity = 1
+          toast("측정이 완료되었습니다.", "success")
+          document.querySelector(".description .start").style.opacity = 0
+          document.querySelector(".description .complete").style.opacity = 1
 
           // 3. 결과 출력
-          const averageSpeed = speedHistory.reduce((a, b) => a + b, 0) / speedHistory.length
-          
-          document.querySelector('#result').innerHTML = `
+          const averageSpeed =
+            speedHistory.reduce((a, b) => a + b, 0) / speedHistory.length
+
+          document.querySelector("#result").innerHTML = `
               # 기본 정보
-              접속 국가 : ${traceAsObject['loc'].toUpperCase()}
+              접속 국가 : ${traceAsObject["loc"].toUpperCase()}
               평균치 : ${round(averageSpeed / 1000)}mb/s
               최대치 : ${round(highestSpeed / 1000)}mb/s
               
               # 특수 정보
-              Cache : ${download.headers['cf-cache-status'].toUpperCase()}
-              PoP : ${traceAsObject['colo'].toUpperCase()}
-              WARP : ${traceAsObject['warp'].toUpperCase()}
+              Cache : ${download.headers["cf-cache-status"].toUpperCase()}
+              PoP : ${traceAsObject["colo"].toUpperCase()}
+              WARP : ${traceAsObject["warp"].toUpperCase()}
           `
-          document.querySelector('#result').classList.remove('hidden')
-          toast('측정이 완료되었습니다.', 'success')
+          document.querySelector("#result").classList.remove("hidden")
         } catch (e) {
           loading(100, true)
-          document.querySelector('.description .start').style.opacity = 0
-          document.querySelector('.description .complete').style.opacity = 0
-          document.querySelector('.description .error').style.opacity = 1
+          document.querySelector(".description .start").style.opacity = 0
+          document.querySelector(".description .complete").style.opacity = 0
+          document.querySelector(".description .error").style.opacity = 1
 
-          toast(e.toString(), 'error')
+          toast(e.toString(), "error")
           console.error(e)
         }
       }

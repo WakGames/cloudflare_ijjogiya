@@ -534,6 +534,26 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.visible {
+  visibility: visible;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.block {
+  display: block;
+}
+
 .flex {
   display: flex;
 }
@@ -546,12 +566,24 @@ video {
   height: 230px;
 }
 
+.h-\[360px\] {
+  height: 360px;
+}
+
 .h-screen {
   height: 100vh;
 }
 
 .w-\[550px\] {
   width: 550px;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-screen {
+  width: 100vw;
 }
 
 .transform {
@@ -568,6 +600,10 @@ video {
 
 .justify-center {
   justify-content: center;
+}
+
+.gap-2 {
+  gap: 0.5rem;
 }
 
 .gap-5 {
@@ -612,8 +648,17 @@ video {
   line-height: 1.75rem;
 }
 
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
 .font-bold {
   font-weight: 700;
+}
+
+.font-light {
+  font-weight: 300;
 }
 
 .text-gray-600 {

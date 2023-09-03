@@ -346,7 +346,7 @@
           document.querySelector(".description .start").style.opacity = 1;
 
           const gitDownload = await axios(
-            "https://github.com/allpgs/test/raw/master/vultr.com.100MB.bin",
+            "https://raw.githubusercontent.com/allpgs/test/master/vultr.com.100MB.bin",
             {
               onDownloadProgress: (progressEvent) => {
                 let percentCompleted = Math.round(

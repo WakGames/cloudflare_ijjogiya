@@ -278,7 +278,7 @@
       })
 
       document.querySelector("#result").addEventListener("click", () => {
-        copyToClipboard(document.querySelector("#result").value)
+        copyToClipboard(document.querySelector("#result").value.replaceAll(`              `, ''))
         toast("복사되었습니다.")
       })
 

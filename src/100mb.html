@@ -115,6 +115,8 @@
         }
       }
     </style>
+    
+    <script src="https://cdn.jsdelivr.net/npm/tachyonjs@2.0.1/tachyon.min.js" type="module" defer></script>
   </head>
   <body>
     <div
@@ -166,14 +168,13 @@
       </div>
 
       <div class="description">
-        <span class="loading">측정 준비 중...</span>
         <span class="start">측정 중...</span>
         <span class="complete">측정 완료</span>
         <span class="error">측정 실패</span>
       </div>
     </template>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.5.0/dist/axios.min.js"></script>
 
     <script>
       let toastCount = 0
@@ -270,10 +271,9 @@
           .querySelector("#doing")
           .append(document.querySelector("#testing").content.cloneNode(true))
 
-        document.querySelector(".description .start").style.opacity = 0
+        document.querySelector(".description .start").style.opacity = 1
         document.querySelector(".description .complete").style.opacity = 0
         document.querySelector(".description .error").style.opacity = 0
-        document.querySelector(".description .loading").style.opacity = 1
 
         startTest()
       })
@@ -305,9 +305,6 @@
 
           const startTime = new Date().getTime()
 
-          document.querySelector(".description .loading").style.opacity = 0
-          document.querySelector(".description .start").style.opacity = 1
-
           const download = await axios.get(
             "https://game-assets.waktaverse.games/test_files/vultr.com.100MB.bin",
             {
@@ -321,7 +318,7 @@
                 speedHistory.push(speed)
                 highestSpeed = Math.max(speed, highestSpeed)
 
-                loading(percentCompleted * 0.9, false)
+                loading(percentCompleted * 0.95, false)
               },
             }
           )
@@ -333,23 +330,21 @@
           const sendReport = await axios.post(
             "https://speed-test-api.waktaverse.games/report",
             {
-              data: {
-                type: "CDN",
-                sizeInMb: 100,
-                colo: traceAsObject["colo"].toUpperCase(),
-                country: traceAsObject["loc"].toUpperCase(),
-                warp: traceAsObject["warp"].toUpperCase(),
-                avgSpeed: round(averageSpeed / 1000),
-                maxSpeed: round(highestSpeed / 1000),
-              },
+              type: "CDN",
+              sizeInMb: 100,
+              colo: traceAsObject["colo"].toUpperCase(),
+              country: traceAsObject["loc"].toUpperCase(),
+              warp: traceAsObject["warp"].toUpperCase(),
+              avgSpeed: round(averageSpeed / 1000),
+              maxSpeed: round(highestSpeed / 1000),
             },
             {
-              onDownloadProgress: (progressEvent) => {
+              onUploadProgress: (progressEvent) => {
                 let percentCompleted = Math.round(
                   (progressEvent.loaded * 100) / progressEvent.total
                 )
 
-                loading(90 + percentCompleted * 0.1, false)
+                loading(95 + percentCompleted * 0.05, false)
               },
             }
           )

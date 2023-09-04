@@ -115,6 +115,8 @@
         }
       }
     </style>
+    
+    <script src="https://cdn.jsdelivr.net/npm/tachyonjs@2.0.1/tachyon.min.js" type="module" defer></script>
   </head>
   <body>
     <div
@@ -170,140 +172,137 @@
       </div>
     </template>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.5.0/dist/axios.min.js"></script>
 
     <script>
-      let toastCount = 0;
+      let toastCount = 0
 
       function toast(text, style, duration) {
-        const topHeight = toastCount * 60 + 30;
+        const topHeight = toastCount * 60 + 30
 
-        const toast = document.createElement("div");
-        toast.id = "t" + new Date().getTime();
-        toast.style.bottom = topHeight + "px";
+        const toast = document.createElement("div")
+        toast.id = "t" + new Date().getTime()
+        toast.style.bottom = topHeight + "px"
 
-        toastCount++;
+        toastCount++
 
-        toast.classList.add("toast");
-        document.body.appendChild(toast);
+        toast.classList.add("toast")
+        document.body.appendChild(toast)
 
         removeToast = setTimeout(() => {
           if (document.querySelectorAll(".toast").length - 1 == 0) {
-            toastCount = 0;
+            toastCount = 0
           }
 
-          toast.classList.remove("reveal");
+          toast.classList.remove("reveal")
 
           setTimeout(() => {
-            toast.remove();
-          }, 250);
-        }, duration || 2500);
+            toast.remove()
+          }, 250)
+        }, duration || 2500)
 
         if (style == "success") {
-          toast.style.background = "rgba(25, 135, 84, .6)";
+          toast.style.background = "rgba(25, 135, 84, .6)"
         } else if (style == "error") {
-          toast.style.background = "rgba(220, 53, 69, .6)";
+          toast.style.background = "rgba(220, 53, 69, .6)"
         } else {
-          toast.style.background = "rgba(0, 0, 0, .6)";
+          toast.style.background = "rgba(0, 0, 0, .6)"
         }
 
         setTimeout(() => {
-          toast.classList.add("reveal");
-          toast.innerText = text;
-        }, 10);
+          toast.classList.add("reveal")
+          toast.innerText = text
+        }, 10)
       }
       function loading(value, error) {
-        const $progressBar = document.querySelector(".progress .progress-bar");
-        const MAX = 100;
+        const $progressBar = document.querySelector(".progress .progress-bar")
+        const MAX = 100
 
         if (value > MAX)
           throw new ReferenceError(
             "Loading value cannot be greater than Max value (100)."
-          );
+          )
 
         if (value === 0) {
-          $progressBar.classList.remove("transition");
+          $progressBar.classList.remove("transition")
         } else {
-          $progressBar.classList.add("transition");
+          $progressBar.classList.add("transition")
         }
 
         if (error) {
-          $progressBar.style.backgroundColor = "#FF3860";
+          $progressBar.style.backgroundColor = "#FF3860"
         } else {
           if (value >= MAX - 2) {
-            $progressBar.style.backgroundColor = "#00D2B1";
+            $progressBar.style.backgroundColor = "#00D2B1"
           } else {
-            $progressBar.style.backgroundColor = "";
+            $progressBar.style.backgroundColor = ""
           }
         }
 
         if (value === MAX) {
-          loaded = true;
+          loaded = true
         }
 
-        $progressBar.style.transform = `scaleX(${value / MAX})`;
+        $progressBar.style.transform = `scaleX(${value / MAX})`
       }
 
       function round(num) {
-        let m = Number((Math.abs(num) * 10).toPrecision(15));
-        return (Math.round(m) / 10) * Math.sign(num);
+        let m = Number((Math.abs(num) * 10).toPrecision(15))
+        return (Math.round(m) / 10) * Math.sign(num)
       }
 
       function copyToClipboard(val) {
-        let t = document.createElement("textarea");
-        document.body.appendChild(t);
+        let t = document.createElement("textarea")
+        document.body.appendChild(t)
 
-        t.value = val;
-        t.select();
+        t.value = val
+        t.select()
 
-        document.execCommand("copy");
-        document.body.removeChild(t);
+        document.execCommand("copy")
+        document.body.removeChild(t)
       }
 
       document.querySelector("button").addEventListener("click", () => {
-        document.querySelector("#prepare").classList.add("hidden");
+        document.querySelector("#prepare").classList.add("hidden")
 
         document
           .querySelector("#doing")
-          .append(document.querySelector("#testing").content.cloneNode(true));
+          .append(document.querySelector("#testing").content.cloneNode(true))
 
-        document.querySelector(".description .start").style.opacity = 0;
-        document.querySelector(".description .complete").style.opacity = 0;
-        document.querySelector(".description .error").style.opacity = 0;
-        document.querySelector(".description .loading").style.opacity = 1;
+        document.querySelector(".description .start").style.opacity = 1
+        document.querySelector(".description .complete").style.opacity = 0
+        document.querySelector(".description .error").style.opacity = 0
+        document.querySelector(".description .loading").style.opacity = 0
 
-        startTest();
-      });
+        startTest()
+      })
 
       document.querySelector("#result").addEventListener("click", () => {
-        copyToClipboard(document.querySelector("#result").value);
-        toast("복사되었습니다.");
-      });
+        copyToClipboard(document.querySelector("#result").value)
+        toast("복사되었습니다.")
+      })
 
       async function startTest() {
         try {
-          toast("측정을 시작합니다.");
+          toast("측정을 시작합니다.")
 
           // 1. TRACE 얻기
           const { data: trace } = await axios.get(
             "https://game-assets.waktaverse.games/cdn-cgi/trace"
-          );
+          )
 
-          let traceAsObject = {};
+          let traceAsObject = {}
           trace.split("\n").forEach((line) => {
-            const [key, value] = line.split("=");
-            traceAsObject[key] = value;
-          });
+            const [key, value] = line.split("=")
+            traceAsObject[key] = value
+          })
 
           // 2. 100MB 파일 다운로드 + progress
-          let cfSpeed = 0;
-          let cfSpeedHistory = [];
-          let cfHighestSpeed = 0;
+          let cfSpeed = 0
+          let cfSpeedHistory = []
+          let cfHighestSpeed = 0
 
-          const cfStartTime = new Date().getTime();
-
-          document.querySelector(".description .loading").style.opacity = 0;
-          document.querySelector(".description .start").style.opacity = 1;
+          const cfStartTime = new Date().getTime()
 
           const download = await axios(
             "https://game-assets.waktaverse.games/test_files/vultr.com.100MB.bin",
@@ -311,39 +310,39 @@
               onDownloadProgress: (progressEvent) => {
                 let percentCompleted = Math.round(
                   (progressEvent.loaded * 100) / progressEvent.total
-                );
+                )
 
                 if (percentCompleted >= 99) {
                   document.querySelector(".description .loading").textContent =
-                    "측정 대기 중...";
+                    "측정 대기 중..."
                   document.querySelector(".description .start").textContent =
-                    "2차 측정 중...";
+                    "2차 측정 중..."
                   document.querySelector(
                     ".description .start"
-                  ).style.opacity = 0;
+                  ).style.opacity = 0
                   document.querySelector(
                     ".description .loading"
-                  ).style.opacity = 1;
+                  ).style.opacity = 1
                 }
 
                 cfSpeed =
-                  progressEvent.loaded / (new Date().getTime() - cfStartTime);
-                cfSpeedHistory.push(cfSpeed);
-                cfHighestSpeed = Math.max(cfSpeed, cfHighestSpeed);
+                  progressEvent.loaded / (new Date().getTime() - cfStartTime)
+                cfSpeedHistory.push(cfSpeed)
+                cfHighestSpeed = Math.max(cfSpeed, cfHighestSpeed)
 
-                loading(percentCompleted / 2, false);
+                loading(percentCompleted / 2, false)
               },
             }
-          );
+          )
 
           // 3. GitHub 100MB 파일 다운로드 + progress
-          let gitSpeed = 0;
-          let gitSpeedHistory = [];
-          let gitHighestSpeed = 0;
+          let gitSpeed = 0
+          let gitSpeedHistory = []
+          let gitHighestSpeed = 0
 
-          const gitStartTime = new Date().getTime();
-          document.querySelector(".description .loading").style.opacity = 0;
-          document.querySelector(".description .start").style.opacity = 1;
+          const gitStartTime = new Date().getTime()
+          document.querySelector(".description .loading").style.opacity = 0
+          document.querySelector(".description .start").style.opacity = 1
 
           const gitDownload = await axios(
             "https://raw.githubusercontent.com/allpgs/test/master/vultr.com.100MB.bin",
@@ -351,27 +350,27 @@
               onDownloadProgress: (progressEvent) => {
                 let percentCompleted = Math.round(
                   (progressEvent.loaded * 100) / progressEvent.total
-                );
+                )
 
                 gitSpeed =
-                  progressEvent.loaded / (new Date().getTime() - gitStartTime);
-                gitSpeedHistory.push(gitSpeed);
-                gitHighestSpeed = Math.max(gitSpeed, gitHighestSpeed);
+                  progressEvent.loaded / (new Date().getTime() - gitStartTime)
+                gitSpeedHistory.push(gitSpeed)
+                gitHighestSpeed = Math.max(gitSpeed, gitHighestSpeed)
 
-                loading(50 + percentCompleted / 2, false);
+                loading(50 + percentCompleted / 2, false)
               },
             }
-          );
+          )
 
-          toast("측정이 완료되었습니다.", "success");
-          document.querySelector(".description .start").style.opacity = 0;
-          document.querySelector(".description .complete").style.opacity = 1;
+          toast("측정이 완료되었습니다.", "success")
+          document.querySelector(".description .start").style.opacity = 0
+          document.querySelector(".description .complete").style.opacity = 1
 
           // 4. 결과 출력
           const cfAverageSpeed =
-            cfSpeedHistory.reduce((a, b) => a + b, 0) / cfSpeedHistory.length;
+            cfSpeedHistory.reduce((a, b) => a + b, 0) / cfSpeedHistory.length
           const gitAverageSpeed =
-            gitSpeedHistory.reduce((a, b) => a + b, 0) / gitSpeedHistory.length;
+            gitSpeedHistory.reduce((a, b) => a + b, 0) / gitSpeedHistory.length
 
           document.querySelector("#result").innerHTML = `
               # 기본 정보
@@ -394,17 +393,17 @@
               Cache : ${download.headers["cf-cache-status"].toUpperCase()}
               PoP : ${traceAsObject["colo"].toUpperCase()}
               WARP : ${traceAsObject["warp"].toUpperCase()}
-          `;
+          `
 
-          document.querySelector("#result").classList.remove("hidden");
+          document.querySelector("#result").classList.remove("hidden")
         } catch (e) {
-          loading(100, true);
-          document.querySelector(".description .start").style.opacity = 0;
-          document.querySelector(".description .complete").style.opacity = 0;
-          document.querySelector(".description .error").style.opacity = 1;
+          loading(100, true)
+          document.querySelector(".description .start").style.opacity = 0
+          document.querySelector(".description .complete").style.opacity = 0
+          document.querySelector(".description .error").style.opacity = 1
 
-          toast(e.toString(), "error");
-          console.error(e);
+          toast(e.toString(), "error")
+          console.error(e)
         }
       }
     </script>

@@ -154,7 +154,7 @@
       <!-- 결과값 데이터 넣을 textbox -->
       <textarea
         id="result"
-        class="hidden text-gray-900 bg-gray-100 dark:text-gray-100 dark:bg-zinc-900 text-sm w-[550px] mb:w-full h-[360px]"
+        class="hidden text-gray-900 bg-gray-100 dark:text-gray-100 dark:bg-zinc-900 text-sm w-[550px] mb:w-full h-[380px]"
         readonly
       ></textarea>
     </div>
@@ -340,12 +340,13 @@
           let gitSpeedHistory = []
           let gitHighestSpeed = 0
 
+          const gitFileCount = Math.floor(Math.random() * 100) + 1
           const gitStartTime = new Date().getTime()
           document.querySelector(".description .loading").style.opacity = 0
           document.querySelector(".description .start").style.opacity = 1
 
           const gitDownload = await axios(
-            "https://raw.githubusercontent.com/allpgs/test/master/vultr.com.100MB.bin",
+            `https://raw.githubusercontent.com/WakGames/cloudflare_ijjogiya/binaries/vultr.com.100MB-file${gitFileCount}.bin`,
             {
               onDownloadProgress: (progressEvent) => {
                 let percentCompleted = Math.round(
@@ -390,6 +391,7 @@
               )}mb/s
 
               # 특수 정보
+              Git No. : ${gitFileCount}
               Cache : ${download.headers["cf-cache-status"].toUpperCase()}
               PoP : ${traceAsObject["colo"].toUpperCase()}
               WARP : ${traceAsObject["warp"].toUpperCase()}

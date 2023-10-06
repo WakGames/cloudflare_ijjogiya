@@ -17,6 +17,7 @@ const { minify } = require('html-minifier-terser')
     fs.mkdirSync('./dist/testing')
     fs.mkdirSync('./dist/assets')
     fs.mkdirSync('./dist/assets/img')
+    fs.mkdirSync('./dist/assets/img/guide')
     fs.mkdirSync('./dist/assets/css')
     fs.mkdirSync('./dist/assets/js')
     fs.mkdirSync('./dist/assets/js/lib')
@@ -69,8 +70,15 @@ const { minify } = require('html-minifier-terser')
 
     // assets minify
     fs.readdirSync('./src/assets/img').forEach(async file => {
-        fs.copyFileSync(`./src/assets/img/${file}`, `./dist/assets/img/${file}`)
-        console.info(`✅ Builded assets/img/${file}`)
+        if (fs.statSync(`./src/assets/img/${file}`).isDirectory()) {
+            fs.readdirSync(`./src/assets/img/${file}`).forEach(async deepfile => {
+                fs.copyFileSync(`./src/assets/img/${file}/${deepfile}`, `./dist/assets/img/${file}/${deepfile}`, fs.constants.COPYFILE_FICLONE)
+                console.info(`✅ Builded assets/img/${file}/${deepfile}`)
+            })
+        } else {
+            fs.copyFileSync(`./src/assets/img/${file}`, `./dist/assets/img/${file}`, fs.constants.COPYFILE_FICLONE)
+            console.info(`✅ Builded assets/img/${file}`)
+        }
     })
 
     fs.readdirSync('./src/assets/css').forEach(async file => {

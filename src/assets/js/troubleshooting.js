@@ -100,11 +100,14 @@ async function startTest() {
     `;
 
     document.querySelector("#result").classList.remove("hidden");
+    document.querySelector("#showHowto").classList.remove("hidden");
   } catch (e) {
     loading(100, true);
     document.querySelector(".description .start").style.opacity = 0;
     document.querySelector(".description .complete").style.opacity = 0;
     document.querySelector(".description .error").style.opacity = 1;
+
+    document.querySelector("#showHowto").classList.remove("hidden");
 
     toast(e.toString(), "error");
     console.error(e);
@@ -113,6 +116,14 @@ async function startTest() {
 
 /* Events */
 document.querySelector("button").addEventListener("click", () => {
+  document.querySelector('#before_start').showModal();
+});
+
+document.querySelector("#showHowto button").addEventListener("click", () => {
+  document.querySelector('#how_to_export_har').showModal();
+});
+
+document.querySelector("button#startTest").addEventListener("click", () => {
   startTest();
 });
 

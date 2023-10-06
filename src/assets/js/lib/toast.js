@@ -1,7 +1,7 @@
 let toastCount = 0,
   removeToast = null;
 
-export default function toast(text, style, duration) {
+export default function toast(text, style = "info", duration = 2500) {
   const topHeight = toastCount * 60 + 30;
 
   const toast = document.createElement("div");
@@ -10,17 +10,17 @@ export default function toast(text, style, duration) {
 
   toastCount++;
 
-  toast.classList.add("toast");
+  toast.classList.add("wakgames-toast");
   document.body.appendChild(toast);
 
   removeToast = setTimeout(() => {
-    if (document.querySelectorAll(".toast").length - 1 == 0) toastCount = 0;
+    if (document.querySelectorAll(".wakgames-toast").length - 1 == 0) toastCount = 0;
     toast.classList.remove("reveal");
 
     setTimeout(() => {
       toast.remove();
     }, 250);
-  }, duration || 2500);
+  }, duration);
 
   if (style == "success") toast.style.background = "rgba(25, 135, 84, .6)";
   else if (style == "error") toast.style.background = "rgba(220, 53, 69, .6)";

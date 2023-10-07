@@ -129,7 +129,7 @@ document.querySelector("button#startTest").addEventListener("click", () => {
 
 document.querySelector("#result").addEventListener("click", () => {
   copyToClipboard(
-    document.querySelector("#result").value.replaceAll(`              `, "")
+    document.querySelector("#result").value.replaceAll(`        `, "")
   );
   toast("복사되었습니다.");
 });

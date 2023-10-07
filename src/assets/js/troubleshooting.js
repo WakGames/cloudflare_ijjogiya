@@ -52,15 +52,15 @@ async function startTest() {
 
             if (percentCompleted >= 99) {
               if (i != 9) {
-                document.querySelector(".description .loading").textContent =
+                document.querySelector(".description .prepare").textContent =
                   "측정 대기 중...";
                 document.querySelector(".description .start").textContent =
                   i + 2 + "차 측정 중...";
                 document.querySelector(".description .start").style.opacity = 0;
-                document.querySelector(".description .loading").style.opacity = 1;
+                document.querySelector(".description .prepare").style.opacity = 1;
               }
             } else {
-              document.querySelector(".description .loading").style.opacity = 0;
+              document.querySelector(".description .prepare").style.opacity = 0;
               document.querySelector(".description .start").style.opacity = 1;
             }
 

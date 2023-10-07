@@ -39,12 +39,12 @@ async function startCompareTest() {
         );
 
         if (percentCompleted >= 99) {
-          document.querySelector(".description .loading").textContent =
+          document.querySelector(".description .prepare").textContent =
             "측정 대기 중...";
           document.querySelector(".description .start").textContent =
             "2차 측정 중...";
           document.querySelector(".description .start").style.opacity = 0;
-          document.querySelector(".description .loading").style.opacity = 1;
+          document.querySelector(".description .prepare").style.opacity = 1;
         }
 
         cfSpeed = progressEvent.loaded / (new Date().getTime() - cfStartTime);
@@ -62,7 +62,7 @@ async function startCompareTest() {
 
     const gitFileCount = Math.floor(Math.random() * 100) + 1;
     const gitStartTime = new Date().getTime();
-    document.querySelector(".description .loading").style.opacity = 0;
+    document.querySelector(".description .prepare").style.opacity = 0;
     document.querySelector(".description .start").style.opacity = 1;
 
     const gitDownload = await axios.get(

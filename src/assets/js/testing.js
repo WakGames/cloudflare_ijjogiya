@@ -119,11 +119,7 @@ async function startTest(size) {
 
 /* Events */
 document.querySelector("button").addEventListener("click", () => {
-  startTest(
-    (
-      location.pathname.split("/")[2]
-    ).replace("mb", "")
-  );
+  startTest(location.pathname.split("/")[3].replace("mb.html", ""));
 });
 
 document.querySelector("#result").addEventListener("click", () => {
